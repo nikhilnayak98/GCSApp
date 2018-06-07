@@ -98,9 +98,9 @@ public abstract class PostListFragment extends Fragment {
 
                 // Determine if the current user has liked this post and set UI accordingly
                 if (model.stars.containsKey(getUid())) {
-                    viewHolder.starView.setImageResource(R.drawable.ic_toggle_star_outline_24);
-                } else {
                     viewHolder.starView.setImageResource(R.drawable.ic_toggle_star_24);
+                } else {
+                    viewHolder.starView.setImageResource(R.drawable.ic_toggle_star_outline_24);
                 }
 
                 // Bind Post to ViewHolder, setting OnClickListener for the star button
