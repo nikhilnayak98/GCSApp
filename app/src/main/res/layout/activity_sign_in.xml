@@ -24,7 +24,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="User Login"
+            android:text="@string/front_login"
             android:textColor="#000"
             android:textSize="20dp"
             android:hint="df"/>
