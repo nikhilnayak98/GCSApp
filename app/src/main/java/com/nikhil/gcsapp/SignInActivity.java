@@ -113,7 +113,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
                         if (task.isSuccessful()) {
                             sendEmailVerification();
-                            onAuthSuccess(task.getResult().getUser());
+                            mAuth.signOut();
                         } else {
                             Toast.makeText(SignInActivity.this, "Sign Up Failed",
                                     Toast.LENGTH_SHORT).show();
@@ -193,19 +193,4 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             });
         }
     }
-
-    /*private void checkIfEmailVerified(){
-        FirebaseUser users = FirebaseAuth.getInstance().getCurrentUser();
-        boolean emailVerified=users.isEmailVerified();
-        if(!emailVerified) {
-            Toast.makeText(this,"Verify the Email Id",Toast.LENGTH_SHORT).show();
-            mAuth.signOut();
-            finish();
-        } else {
-            mEmailField.getText().clear();
-            mPasswordField.getText().clear();
-            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
-    }*/
 }
