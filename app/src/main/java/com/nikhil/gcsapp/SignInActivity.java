@@ -78,7 +78,14 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                         hideProgressDialog();
 
                         if (task.isSuccessful()) {
-                            onAuthSuccess(task.getResult().getUser());
+                            FirebaseUser users = FirebaseAuth.getInstance().getCurrentUser();
+                            boolean emailVerified = users.isEmailVerified();
+                            if(!emailVerified) {
+                                Toast.makeText(SignInActivity.this, "Verify Email Id",
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                onAuthSuccess(task.getResult().getUser());
+                            }
                         } else {
                             Toast.makeText(SignInActivity.this, "Sign In Failed",
                                     Toast.LENGTH_SHORT).show();
@@ -105,6 +112,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                         hideProgressDialog();
 
                         if (task.isSuccessful()) {
+                            sendEmailVerification();
                             onAuthSuccess(task.getResult().getUser());
                         } else {
                             Toast.makeText(SignInActivity.this, "Sign Up Failed",
@@ -169,4 +177,35 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             signUp();
         }
     }
+
+    private void sendEmailVerification() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user!=null){
+            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()){
+                        Toast.makeText(SignInActivity.this,"Check your Email for verification",
+                                Toast.LENGTH_SHORT).show();
+                        FirebaseAuth.getInstance().signOut();
+                    }
+                }
+            });
+        }
+    }
+
+    /*private void checkIfEmailVerified(){
+        FirebaseUser users = FirebaseAuth.getInstance().getCurrentUser();
+        boolean emailVerified=users.isEmailVerified();
+        if(!emailVerified) {
+            Toast.makeText(this,"Verify the Email Id",Toast.LENGTH_SHORT).show();
+            mAuth.signOut();
+            finish();
+        } else {
+            mEmailField.getText().clear();
+            mPasswordField.getText().clear();
+            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+    }*/
 }
