@@ -29,9 +29,7 @@ public abstract class PostListFragment extends Fragment {
 
     private static final String TAG = "PostListFragment";
 
-    // [START define_database_reference]
     private DatabaseReference mDatabase;
-    // [END define_database_reference]
 
     private FirebaseRecyclerAdapter<Post, PostViewHolder> mAdapter;
     private RecyclerView mRecycler;
@@ -45,9 +43,7 @@ public abstract class PostListFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_all_posts, container, false);
 
-        // [START create_database_reference]
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        // [END create_database_reference]
 
         mRecycler = rootView.findViewById(R.id.messages_list);
         mRecycler.setHasFixedSize(true);
@@ -59,13 +55,11 @@ public abstract class PostListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Set up Layout Manager, reverse layout
         mManager = new LinearLayoutManager(getActivity());
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
 
-        // Set up FirebaseRecyclerAdapter with the Query
         Query postsQuery = getQuery(mDatabase);
 
         FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Post>()
@@ -84,34 +78,28 @@ public abstract class PostListFragment extends Fragment {
             protected void onBindViewHolder(PostViewHolder viewHolder, int position, final Post model) {
                 final DatabaseReference postRef = getRef(position);
 
-                // Set click listener for the whole post view
                 final String postKey = postRef.getKey();
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Launch PostDetailActivity
                         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
                         intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, postKey);
                         startActivity(intent);
                     }
                 });
 
-                // Determine if the current user has liked this post and set UI accordingly
                 if (model.stars.containsKey(getUid())) {
                     viewHolder.starView.setImageResource(R.drawable.ic_toggle_star_24);
                 } else {
                     viewHolder.starView.setImageResource(R.drawable.ic_toggle_star_outline_24);
                 }
 
-                // Bind Post to ViewHolder, setting OnClickListener for the star button
                 viewHolder.bindToPost(model, new View.OnClickListener() {
                     @Override
                     public void onClick(View starView) {
-                        // Need to write to both places the post is stored
                         DatabaseReference globalPostRef = mDatabase.child("posts").child(postRef.getKey());
                         DatabaseReference userPostRef = mDatabase.child("user-posts").child(model.uid).child(postRef.getKey());
 
-                        // Run two transactions
                         onStarClicked(globalPostRef);
                         onStarClicked(userPostRef);
                     }
@@ -121,7 +109,6 @@ public abstract class PostListFragment extends Fragment {
         mRecycler.setAdapter(mAdapter);
     }
 
-    // [START post_stars_transaction]
     private void onStarClicked(DatabaseReference postRef) {
         postRef.runTransaction(new Transaction.Handler() {
             @Override
@@ -132,16 +119,13 @@ public abstract class PostListFragment extends Fragment {
                 }
 
                 if (p.stars.containsKey(getUid())) {
-                    // Unstar the post and remove self from stars
                     p.starCount = p.starCount - 1;
                     p.stars.remove(getUid());
                 } else {
-                    // Star the post and add self to stars
                     p.starCount = p.starCount + 1;
                     p.stars.put(getUid(), true);
                 }
 
-                // Set value and report transaction success
                 mutableData.setValue(p);
                 return Transaction.success(mutableData);
             }
@@ -154,8 +138,6 @@ public abstract class PostListFragment extends Fragment {
             }
         });
     }
-    // [END post_stars_transaction]
-
 
     @Override
     public void onStart() {

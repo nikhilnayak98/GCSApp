@@ -51,13 +51,12 @@ public class MainActivity extends BaseActivity {
                 return mFragmentNames[position];
             }
         };
-        // Set up the ViewPager with the sections adapter.
+
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mPagerAdapter);
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        // Button launches NewPostActivity
         findViewById(R.id.fab_new_post).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
