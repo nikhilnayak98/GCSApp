@@ -18,6 +18,7 @@
     <string name="hint_email">email</string>
     <string name="sign_in">Sign In</string>
     <string name="wrong_credentials">Wrong Credentials</string>
+    <string name="user_not_found">User Not Found</string>
     <string name="sign_in_failed">Sign In Failed</string>
     <string name="email_verification">Check Your Email for Verification</string>
     <string name="verify_email">Verify Email Id</string>

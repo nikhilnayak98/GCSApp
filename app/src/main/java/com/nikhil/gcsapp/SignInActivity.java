@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
@@ -99,6 +100,9 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                                 throw task.getException();
                             } catch (FirebaseAuthInvalidCredentialsException authError) {
                                 Toast.makeText(SignInActivity.this, R.string.wrong_credentials,
+                                        Toast.LENGTH_SHORT).show();
+                            } catch (FirebaseAuthInvalidUserException invalidUserError) {
+                                Toast.makeText(SignInActivity.this, R.string.user_not_found,
                                         Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 Toast.makeText(SignInActivity.this, R.string.sign_in_failed,
