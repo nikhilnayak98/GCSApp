@@ -82,14 +82,21 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/button_reset"
-            android:layout_width="150dp"
+        <LinearLayout
+            android:id="@+id/layout_button_reset"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/layout_buttons"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="147dp"
-            android:text="@string/reset" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_reset"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/reset" />
+
+        </LinearLayout>
 
 
     </RelativeLayout>
