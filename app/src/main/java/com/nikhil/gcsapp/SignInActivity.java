@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hbb20.CountryCodePicker;
 import com.nikhil.gcsapp.models.User;
 
 import java.util.regex.Matcher;
@@ -47,6 +48,8 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     private Button mPhoneGetCodeButton;
     private Button mPhoneCodeButton;
 
+    private CountryCodePicker mCountryCodePicker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +63,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         mPasswordField = findViewById(R.id.field_password);
         mPhoneNumberField = findViewById(R.id.phone_num_field);
         mPhoneCodeField = findViewById(R.id.phone_code_field);
+        mCountryCodePicker = findViewById(R.id.country_code_picker);
 
         mSignInButton = findViewById(R.id.button_sign_in);
         mSignUpButton = findViewById(R.id.button_sign_up);
@@ -232,6 +236,24 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     }
 
     private boolean validateEmail() {
+        boolean result = true;
+        if (TextUtils.isEmpty(mEmailField.getText().toString())) {
+            mEmailField.setError("Required");
+            result = false;
+        } else {
+            Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(mEmailField.getText().toString());
+            if (!matcher.find()) {
+                mEmailField.setError("Not An Email");
+                result = false;
+            } else {
+                mEmailField.setError(null);
+            }
+        }
+
+        return result;
+    }
+
+    private boolean validatePhone() {
         boolean result = true;
         if (TextUtils.isEmpty(mEmailField.getText().toString())) {
             mEmailField.setError("Required");
