@@ -41,6 +41,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     private Button mSignInButton;
     private Button mSignUpButton;
     private Button mResetButton;
+    private Button mPhoneButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         mSignInButton = findViewById(R.id.button_sign_in);
         mSignUpButton = findViewById(R.id.button_sign_up);
         mResetButton = findViewById(R.id.button_reset);
+        mPhoneButton = findViewById(R.id.button_phone_auth);
 
         // Click listeners
         mSignInButton.setOnClickListener(this);
@@ -67,6 +69,13 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 if(validateEmail()) {
                     sendEmailForPasswordReset();
                 }
+            }
+        });
+
+        mPhoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO
             }
         });
     }

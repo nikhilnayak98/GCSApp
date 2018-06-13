@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">GCS</string>
     <string name="action_settings">Settings</string>
-    <string name="menu_login">Log in</string>
+    <string name="menu_login">Log In</string>
     <string name="front_login">User Login</string>
     <string name="menu_logout">Log out</string>
     <string name="login_label">Log In</string>
+    <string name="sign_in_phone">Phone Log In</string>
     <string name="email_label">Email</string>
     <string name="password_label">Password</string>
     <string name="min_password_label">Password Length Should >= 6</string>
