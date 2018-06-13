@@ -14,6 +14,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -81,14 +84,21 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                             FirebaseUser users = FirebaseAuth.getInstance().getCurrentUser();
                             boolean emailVerified = users.isEmailVerified();
                             if(!emailVerified) {
-                                Toast.makeText(SignInActivity.this, "Verify Email Id",
+                                Toast.makeText(SignInActivity.this, R.string.verify_email,
                                         Toast.LENGTH_SHORT).show();
                             } else {
                                 onAuthSuccess(task.getResult().getUser());
                             }
                         } else {
-                            Toast.makeText(SignInActivity.this, "Sign In Failed",
+                            try {
+                                throw task.getException();
+                            } catch (FirebaseAuthInvalidCredentialsException authError) {
+                                Toast.makeText(SignInActivity.this, R.string.wrong_credentials,
+                                        Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Toast.makeText(SignInActivity.this, R.string.sign_in_failed,
                                     Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });
@@ -115,8 +125,18 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                             sendEmailVerification();
                             mAuth.signOut();
                         } else {
-                            Toast.makeText(SignInActivity.this, "Sign Up Failed",
-                                    Toast.LENGTH_SHORT).show();
+                            try {
+                                throw task.getException();
+                            } catch (FirebaseAuthUserCollisionException collisionError) {
+                                Toast.makeText(SignInActivity.this, R.string.user_exists,
+                                        Toast.LENGTH_SHORT).show();
+                            } catch (FirebaseAuthWeakPasswordException weakAuth) {
+                                Toast.makeText(SignInActivity.this, R.string.min_password_label,
+                                        Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Toast.makeText(SignInActivity.this, R.string.sign_up_failed,
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });
@@ -178,7 +198,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()){
-                        Toast.makeText(SignInActivity.this,"Check your Email for verification",
+                        Toast.makeText(SignInActivity.this, R.string.email_verification,
                                 Toast.LENGTH_SHORT).show();
                         FirebaseAuth.getInstance().signOut();
                     }
