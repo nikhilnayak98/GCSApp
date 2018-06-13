@@ -83,14 +83,18 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         mPhoneGetCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO
+                // TODO : Request for a Code
+                Toast.makeText(SignInActivity.this, "Will be implemented next week",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
         mPhoneCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO
+                // TODO : Get Code received via SMS
+                Toast.makeText(SignInActivity.this, "Will be implemented next week",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
