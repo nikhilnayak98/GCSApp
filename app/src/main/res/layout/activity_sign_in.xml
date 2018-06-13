@@ -117,10 +117,8 @@
             android:id="@+id/layout_phone_auth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_below="@+id/icon_phone"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="206dp"
             android:orientation="horizontal">
 
             <EditText
@@ -151,7 +149,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/layout_phone_auth"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="-206dp"
             android:orientation="horizontal">
 
             <Button
