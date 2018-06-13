@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.nikhil.gcsapp.models.User;
@@ -37,11 +38,14 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     private EditText mEmailField;
     private EditText mPasswordField;
+    private EditText mPhoneNumberField;
+    private EditText mPhoneCodeField;
 
     private Button mSignInButton;
     private Button mSignUpButton;
     private Button mResetButton;
-    private Button mPhoneButton;
+    private Button mPhoneGetCodeButton;
+    private Button mPhoneCodeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +58,14 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         // Views
         mEmailField = findViewById(R.id.field_email);
         mPasswordField = findViewById(R.id.field_password);
+        mPhoneNumberField = findViewById(R.id.phone_num_field);
+        mPhoneCodeField = findViewById(R.id.phone_code_field);
+
         mSignInButton = findViewById(R.id.button_sign_in);
         mSignUpButton = findViewById(R.id.button_sign_up);
         mResetButton = findViewById(R.id.button_reset);
-        mPhoneButton = findViewById(R.id.button_phone_auth);
+        mPhoneGetCodeButton = findViewById(R.id.button_phone_get_code);
+        mPhoneCodeButton = findViewById(R.id.button_phone_login);
 
         // Click listeners
         mSignInButton.setOnClickListener(this);
@@ -72,7 +80,14 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
-        mPhoneButton.setOnClickListener(new View.OnClickListener() {
+        mPhoneGetCodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO
+            }
+        });
+
+        mPhoneCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO
@@ -108,8 +123,8 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                         hideProgressDialog();
 
                         if (task.isSuccessful()) {
-                            FirebaseUser users = FirebaseAuth.getInstance().getCurrentUser();
-                            boolean emailVerified = users.isEmailVerified();
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            boolean emailVerified = user.isEmailVerified();
                             if(!emailVerified) {
                                 Toast.makeText(SignInActivity.this, R.string.verify_email,
                                         Toast.LENGTH_SHORT).show();
@@ -284,4 +299,39 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                     }
                 });
     }
+
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "signInWithPhoneAuth:success");
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            boolean emailVerified = user.isEmailVerified();
+                            if(!emailVerified) {
+                                Toast.makeText(SignInActivity.this, R.string.verify_email,
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                onAuthSuccess(task.getResult().getUser());
+                            }
+                        } else {
+                            Log.w(TAG, "signInWithPhoneAuth:failure", task.getException());
+                            try {
+                                throw task.getException();
+                            } catch (FirebaseAuthInvalidCredentialsException authError) {
+                                Toast.makeText(SignInActivity.this, "Invalid Code",
+                                        Toast.LENGTH_SHORT).show();
+                            } catch (FirebaseAuthInvalidUserException invalidUserError) {
+                                Toast.makeText(SignInActivity.this, R.string.user_not_found,
+                                        Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Toast.makeText(SignInActivity.this, R.string.sign_in_failed,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+    }
+
 }
