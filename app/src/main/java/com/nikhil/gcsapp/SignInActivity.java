@@ -37,8 +37,10 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     private EditText mEmailField;
     private EditText mPasswordField;
+
     private Button mSignInButton;
     private Button mSignUpButton;
+    private Button mResetButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +55,20 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         mPasswordField = findViewById(R.id.field_password);
         mSignInButton = findViewById(R.id.button_sign_in);
         mSignUpButton = findViewById(R.id.button_sign_up);
+        mResetButton = findViewById(R.id.button_reset);
 
         // Click listeners
         mSignInButton.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
+
+        mResetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(validateEmail()) {
+                    sendEmailForPasswordReset();
+                }
+            }
+        });
     }
 
     @Override
@@ -106,7 +118,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                                         Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 Toast.makeText(SignInActivity.this, R.string.sign_in_failed,
-                                    Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -191,6 +203,24 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         return result;
     }
 
+    private boolean validateEmail() {
+        boolean result = true;
+        if (TextUtils.isEmpty(mEmailField.getText().toString())) {
+            mEmailField.setError("Required");
+            result = false;
+        } else {
+            Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(mEmailField.getText().toString());
+            if (!matcher.find()) {
+                mEmailField.setError("Not An Email");
+                result = false;
+            } else {
+                mEmailField.setError(null);
+            }
+        }
+
+        return result;
+    }
+
     private void writeNewUser(String userId, String name, String email) {
         User user = new User(name, email);
         mDatabase.child("users").child(userId).setValue(user);
@@ -208,7 +238,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     private void sendEmailVerification() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user!=null){
+        if (user != null){
             user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -220,5 +250,29 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 }
             });
         }
+    }
+
+    private void sendEmailForPasswordReset() {
+        FirebaseAuth.getInstance().sendPasswordResetEmail(mEmailField.getText().toString())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Email Sent.");
+                            Toast.makeText(SignInActivity.this, R.string.email_password_reset,
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            try {
+                                throw task.getException();
+                            }  catch (FirebaseAuthInvalidUserException invalidUserError) {
+                                Toast.makeText(SignInActivity.this, R.string.user_not_found,
+                                        Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Toast.makeText(SignInActivity.this, R.string.reset_failed,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
     }
 }
