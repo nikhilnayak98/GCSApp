@@ -22,9 +22,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.nikhil.gcsapp.models.User;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SignInActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "SignInActivity";
+    private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
@@ -163,7 +168,13 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             mEmailField.setError("Required");
             result = false;
         } else {
-            mEmailField.setError(null);
+            Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(mEmailField.getText().toString());
+            if (!matcher.find()) {
+                mEmailField.setError("Not An Email");
+                result = false;
+            } else {
+                mEmailField.setError(null);
+            }
         }
 
         if (TextUtils.isEmpty(mPasswordField.getText().toString())) {
