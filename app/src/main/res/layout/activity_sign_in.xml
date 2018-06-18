@@ -119,6 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/icon_phone"
             android:layout_margin="14dp"
+            app:ccp_countryPreference="us,in"
             app:ccp_autoDetectCountry="true"
             app:ccp_showFullName="true"
             app:ccp_showNameCode="false"
@@ -142,7 +143,7 @@
                 android:gravity="center_horizontal"
                 android:hint="@string/hint_phone"
                 android:inputType="phone"
-                android:maxLines="1" />
+                android:maxLength="10" />
 
             <EditText
                 android:id="@+id/phone_code_field"
@@ -176,6 +177,22 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/sign_in" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_phone_buttons_s"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_phone_buttons"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_resend_code"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/resend_code" />
 
         </LinearLayout>
 

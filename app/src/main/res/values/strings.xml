@@ -27,6 +27,7 @@
     <string name="user_not_found">User Not Found</string>
     <string name="sign_in_failed">Sign In Failed</string>
     <string name="reset_failed">Reset Failed</string>
+    <string name="resend_code">Resend Code</string>
     <string name="email_verification">Check Your Email for Verification</string>
     <string name="verify_email">Verify Email Id</string>
     <string name="heading_recent">Recent</string>
