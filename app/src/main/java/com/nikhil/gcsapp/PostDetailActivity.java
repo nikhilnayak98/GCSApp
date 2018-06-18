@@ -104,7 +104,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                Toast.makeText(PostDetailActivity.this, "Failed to load post.",
+                Toast.makeText(PostDetailActivity.this, R.string.failed_load + "post.",
                         Toast.LENGTH_SHORT).show();
             }
         };
@@ -238,7 +238,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     Log.w(TAG, "postComments:onCancelled", databaseError.toException());
-                    Toast.makeText(mContext, "Failed to load comments.",
+                    Toast.makeText(mContext, R.string.failed_load + "comments.",
                             Toast.LENGTH_SHORT).show();
                 }
             };
@@ -289,6 +289,8 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
             FirebaseDatabase.getInstance().getReference()
                     .child("user-posts")
                     .child(FirebaseAuth.getInstance().getUid()).child(mPostKey).removeValue();
+            Toast.makeText(PostDetailActivity.this, R.string.delete_success,
+                    Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, MainActivity.class));
             finish();
             return true;

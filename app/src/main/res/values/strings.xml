@@ -34,5 +34,7 @@
     <string name="heading_my_posts">My Posts</string>
     <string name="heading_my_top_posts">My Top Posts</string>
     <string name="quota">Quota exceeded</string>
+    <string name="failed_load">Failed to load </string>
+    <string name="delete_success">Deleted Successfully</string>
     <string name="default_string">default</string>
 </resources>
