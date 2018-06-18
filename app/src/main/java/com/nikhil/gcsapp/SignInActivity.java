@@ -108,7 +108,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                     mPhoneNumberField.setError("Invalid phone number.");
                 } else if (e instanceof FirebaseTooManyRequestsException) {
                     // The SMS quota for the project has been exceeded
-                    Snackbar.make(findViewById(android.R.id.content), "Quota exceeded.",
+                    Snackbar.make(findViewById(android.R.id.content), R.string.quota,
                             Snackbar.LENGTH_SHORT).show();
                 }
             }
