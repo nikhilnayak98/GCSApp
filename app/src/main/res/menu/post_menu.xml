@@ -4,12 +4,6 @@
     tools:context=".PostDetailActivity">
 
     <item
-        android:id="@+id/action_edit_post"
-        android:title="@string/edit"
-        android:visible="true"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_delete_post"
         android:title="@string/delete"
         android:visible="true"
