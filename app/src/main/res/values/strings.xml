@@ -8,6 +8,7 @@
     <string name="menu_logout">Log out</string>
     <string name="login_label">Log In</string>
     <string name="get_code_phone">Get Code</string>
+    <string name="delete">Delete</string>
     <string name="hint_code">code</string>
     <string name="email_label">Email</string>
     <string name="password_label">Password</string>

@@ -1,11 +1,14 @@
 package com.nikhil.gcsapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,11 +48,16 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private EditText mCommentField;
     private Button mCommentButton;
     private RecyclerView mCommentsRecycler;
+    private Menu menu;
+
+    private Post post;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
+        invalidateOptionsMenu();
 
         mPostKey = getIntent().getStringExtra(EXTRA_POST_KEY);
         if (mPostKey == null) {
@@ -79,10 +88,17 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Post post = dataSnapshot.getValue(Post.class);
-                mAuthorView.setText(post.author);
-                mTitleView.setText(post.title);
-                mBodyView.setText(post.body);
+                if(dataSnapshot.hasChildren()) {
+                    post = dataSnapshot.getValue(Post.class);
+                    mAuthorView.setText(post.author);
+                    mTitleView.setText(post.title);
+                    mBodyView.setText(post.body);
+                }
+
+                if (!(post.uid.toString()).equals(FirebaseAuth.getInstance().getUid().toString())) {
+                    MenuItem menuItem = menu.findItem(R.id.action_delete_post);
+                    menuItem.setVisible(false);
+                }
             }
 
             @Override
@@ -126,7 +142,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        User user = dataSnapshot.getValue(User.class);
+                        user = dataSnapshot.getValue(User.class);
                         String authorName = user.username;
 
                         String commentText = mCommentField.getText().toString();
@@ -255,5 +271,29 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
             }
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        getMenuInflater().inflate(R.menu.post_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int i = item.getItemId();
+        if (i == R.id.action_delete_post) {
+            FirebaseDatabase.getInstance().getReference()
+                    .child("posts").child(mPostKey).removeValue();
+            FirebaseDatabase.getInstance().getReference()
+                    .child("user-posts")
+                    .child(FirebaseAuth.getInstance().getUid()).child(mPostKey).removeValue();
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 }
