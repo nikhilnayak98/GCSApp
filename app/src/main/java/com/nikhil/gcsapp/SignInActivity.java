@@ -161,9 +161,6 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                     String number = mCountryCodePicker.getFullNumberWithPlus().toString()
                             + mPhoneNumberField.getText().toString();
                     resendVerificationCode(number, mResendToken);
-                } else {
-                    Toast.makeText(SignInActivity.this, "Error",
-                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
