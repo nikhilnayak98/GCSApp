@@ -36,6 +36,8 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
     public static final String EXTRA_POST_KEY = "post_key";
 
+    private static boolean isAccountOwner = true;
+
     private DatabaseReference mPostReference;
     private DatabaseReference mCommentsReference;
     private ValueEventListener mPostListener;
@@ -48,7 +50,6 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private EditText mCommentField;
     private Button mCommentButton;
     private RecyclerView mCommentsRecycler;
-    private Menu menu;
 
     private Post post;
     private User user;
@@ -57,7 +58,6 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
-        invalidateOptionsMenu();
 
         mPostKey = getIntent().getStringExtra(EXTRA_POST_KEY);
         if (mPostKey == null) {
@@ -95,9 +95,12 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                     mBodyView.setText(post.body);
                 }
 
-                if (!(post.uid.toString()).equals(FirebaseAuth.getInstance().getUid().toString())) {
-                    MenuItem menuItem = menu.findItem(R.id.action_delete_post);
-                    menuItem.setVisible(false);
+                if ((post.uid.toString()).equals(getUid().toString())) {
+                    isAccountOwner = true;
+                } else {
+                    isAccountOwner = false;
+                    invalidateOptionsMenu();
+                    supportInvalidateOptionsMenu();
                 }
             }
 
@@ -275,8 +278,10 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu = menu;
         getMenuInflater().inflate(R.menu.post_menu, menu);
+        if(!isAccountOwner) {
+            menu.clear();
+        }
         return true;
     }
 
