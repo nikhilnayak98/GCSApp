@@ -95,7 +95,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                     mBodyView.setText(post.body);
                 }
 
-                if ((post.uid.toString()).equals(getUid().toString())) {
+                if (post.uid.equals(getUid())) {
                     isAccountOwner = true;
                 } else {
                     isAccountOwner = false;
@@ -296,7 +296,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
             FirebaseDatabase.getInstance().getReference()
                     .child("user-posts")
-                    .child(FirebaseAuth.getInstance().getUid())
+                    .child(getUid())
                     .child(mPostKey)
                     .removeValue();
 
