@@ -3,9 +3,9 @@ package com.nikhil.gcsapp.fragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
-public class RecentPostsFragment extends PostListFragment {
+public class AllPostsFragment extends PostListFragment {
 
-    public RecentPostsFragment() {}
+    public AllPostsFragment() {}
 
     @Override
     public Query getQuery(DatabaseReference databaseReference) {
