@@ -290,12 +290,19 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         int i = item.getItemId();
         if (i == R.id.action_delete_post) {
             FirebaseDatabase.getInstance().getReference()
-                    .child("posts").child(mPostKey).removeValue();
+                    .child("posts")
+                    .child(mPostKey)
+                    .removeValue();
+
             FirebaseDatabase.getInstance().getReference()
                     .child("user-posts")
-                    .child(FirebaseAuth.getInstance().getUid()).child(mPostKey).removeValue();
+                    .child(FirebaseAuth.getInstance().getUid())
+                    .child(mPostKey)
+                    .removeValue();
+
             Toast.makeText(PostDetailActivity.this, R.string.delete_success,
                     Toast.LENGTH_SHORT).show();
+
             startActivity(new Intent(this, MainActivity.class));
             finish();
             return true;
