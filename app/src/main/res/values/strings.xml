@@ -30,9 +30,9 @@
     <string name="resend_code">Resend Code</string>
     <string name="email_verification">Check Your Email for Verification</string>
     <string name="verify_email">Verify Email Id</string>
-    <string name="heading_recent">Recent</string>
-    <string name="heading_my_posts">My Posts</string>
-    <string name="heading_my_top_posts">My Top Posts</string>
+    <string name="heading_recent">All Posts</string>
+    <string name="heading_my_posts">Your Posts</string>
+    <string name="heading_my_top_posts">Your Trending Posts</string>
     <string name="quota">Quota exceeded</string>
     <string name="failed_load">Failed to load </string>
     <string name="delete_success">Deleted Successfully</string>
