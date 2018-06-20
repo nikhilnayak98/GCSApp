@@ -12,7 +12,7 @@
     <string name="hint_code">code</string>
     <string name="email_label">Email</string>
     <string name="password_label">Password</string>
-    <string name="min_password_label">Password Length Should >= 6</string>
+    <string name="min_password_label">Password Length Should Be >= 6</string>
     <string name="send_text">Send</string>
     <string name="title_sign_in">Welcome</string>
     <string name="sign_up">Sign Up</string>
